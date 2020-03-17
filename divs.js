@@ -20,9 +20,6 @@ function loginDiv() {
         <button type="button" class="btn btn-primary" id="login">
           login
         </button>
-        <button type="button" class="btn btn-primary" id="register">
-          register</button
-        > 
         <span class="badge badge-pill badge-warning" onclick=forgot()>Forgot Password ?</span>
       </div>
     </form>
@@ -64,4 +61,49 @@ function registerDiv() {
 </div>`;
 
 return registerDiv;  
+}
+
+
+function forgotDiv() {
+  var forDiv = ` <div id="forgotStatus">
+<form>
+<div class="form-group col-md-3">
+<h2>Forgot Password <span class="badge badge-secondary">?</span></h2>
+  <input
+    type="text"
+    class="form-control"
+    id="forgotEmail"
+    placeholder="Email"
+  />
+  <small class="form-text text-muted"
+    >We'll never share your Email with anyone else.</small
+  >
+  <button type="button" class="btn btn-primary" id="forgotBtn">Submit</button>
+</div>
+</form> 
+</div>`;
+
+return forDiv;
+}
+
+function homeDiv() {
+  var homeDiv = ` <div id="forgotStatus">
+<form>
+<div class="form-group col-md-3">
+<h2>Forgot Password <span class="badge badge-secondary">?</span></h2>
+  <input
+    type="text"
+    class="form-control"
+    id="forgotEmail"
+    placeholder="Email"
+  />
+  <small class="form-text text-muted"
+    >We'll never share your Email with anyone else.</small
+  >
+  <button type="button" class="btn btn-primary" id="forgotBtn">Submit</button>
+</div>
+</form> 
+</div>`;
+
+return homeDiv;
 }

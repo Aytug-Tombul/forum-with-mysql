@@ -10,3 +10,14 @@ $(document).on("click", "#registerBtn", function() {
     let div= registerDiv();    
     $("#forum").append(div);
   });
+
+function forgot() {
+  $("#forum").empty();
+    let div= forgotDiv();    
+    $("#forum").append(div);
+}
+function backHome() {
+  $("#forum").empty();
+    let div= homeDiv();    
+    $("#forum").append(div);
+}
