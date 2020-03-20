@@ -100,11 +100,11 @@ function homeDiv() {
   </div>
   <div class="card text-center" style="width: 18rem; padding-right:0px;">
   <div class="card-header bg-dark text-light">
-    <h5>Health</h5>
+    <h5>Games</h5>
   </div>
   <div class="card-body">
     <h5 class="card-title">Popular Healty things</h5>
-    <a href="#" class="btn btn-dark" onclick="goHealth()">Go somewhere</a>
+    <a href="#" class="btn btn-dark" onclick="goGames()">Go somewhere</a>
   </div>
   </div>
   <div class="card text-center" style="width: 18rem; padding-right:0px;">
