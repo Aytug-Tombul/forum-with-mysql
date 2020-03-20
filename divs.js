@@ -87,23 +87,64 @@ return forDiv;
 }
 
 function homeDiv() {
-  var homeDiv = ` <div id="forgotStatus">
-<form>
-<div class="form-group col-md-3">
-<h2>Forgot Password <span class="badge badge-secondary">?</span></h2>
-  <input
-    type="text"
-    class="form-control"
-    id="forgotEmail"
-    placeholder="Email"
-  />
-  <small class="form-text text-muted"
-    >We'll never share your Email with anyone else.</small
-  >
-  <button type="button" class="btn btn-primary" id="forgotBtn">Submit</button>
-</div>
-</form> 
-</div>`;
+  var homeDiv = `
+  <div class="card-deck">
+  <div class="card text-center" style="width: 18rem; padding-right:0px;">
+  <div class="card-header bg-dark text-light">
+    <h5>Health</h5>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Popular Healty things</h5>
+    <a href="#" class="btn btn-dark" onclick="goHealth()">Go somewhere</a>
+  </div>
+  </div>
+  <div class="card text-center" style="width: 18rem; padding-right:0px;">
+  <div class="card-header bg-dark text-light">
+    <h5>Health</h5>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Popular Healty things</h5>
+    <a href="#" class="btn btn-dark" onclick="goHealth()">Go somewhere</a>
+  </div>
+  </div>
+  <div class="card text-center" style="width: 18rem; padding-right:0px;">
+  <div class="card-header bg-dark text-light">
+    <h5>Health</h5>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Popular Healty things</h5>
+    <a href="#" class="btn btn-dark" onclick="goHealth()">Go somewhere</a>
+  </div>
+  </div>
+  </div>
+  <div class="card-deck" style="padding-top: 20px;">
+  <div class="card text-center">
+  <div class="card-header bg-dark text-light">
+    <h5>Health</h5>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Popular Healty things</h5>
+    <a href="#" class="btn btn-dark" onclick="goHealth()">Go somewhere</a>
+  </div>
+  </div>
+  <div class="card text-center">
+  <div class="card-header bg-dark text-light">
+    <h5>Health</h5>
+  </div>
+  <div class="card-body">
+    <h5 class="card-title">Popular Healty things</h5>
+    <a href="#" class="btn btn-dark" onclick="goHealth()">Go somewhere</a>
+  </div>
+  </div>
+  </div>
+  `
+  ;
 
 return homeDiv;
+}
+
+function healthDiv() {
+  var healthDiv= `<a>You did it!</a>`;
+
+return healthDiv;
 }

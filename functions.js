@@ -21,3 +21,8 @@ function backHome() {
     let div= homeDiv();    
     $("#forum").append(div);
 }
+function goHealth() {
+  $("#forum").empty();
+    let div3= healthDiv();    
+    $("#forum").append(div3);
+}
