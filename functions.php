@@ -1,6 +1,6 @@
 <?php
 
-use PHPMailer\PHPMailer;
+use PHPMailer;
 
 
 require_once "PHPMailer/PHPMailer.php";
@@ -12,10 +12,9 @@ require_once "PHPMailer/Exception.php";
 $servername = "localhost";
 $DBusername = "root";
 $DBpassword = "";
-$DBname = "blog_db";
+$DBname = "forum";
 $pdo = new PDO("mysql:host=$servername;dbname=$DBname", $DBusername, $DBpassword);
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
 switch($_POST['functionName']) {
     case 'login':
        echo "you did it!";
@@ -37,7 +36,7 @@ switch($_POST['functionName']) {
         } else {
             try {
 
-                $sql = "INSERT INTO `users_tbl` (`id`, `username`, `password`, `email`, `referrer`, `photo`, `token`, `token_Expire`,role) VALUES (?,?,?,?,?,?,?,?,?)";
+                $sql = "INSERT INTO `users` (`id`, `username`, `password`, `email`, `referrer`, `photo`, `token`, `token_Expire`,role) VALUES (?,?,?,?,?,?,?,?,?)";
                 $register=$pdo->prepare($sql);
                 $register->execute(array(NULL,$username, $password,$email,$referrer,$image,NULL,date("Y-m-d H:i:s"),"user"));
                 echo "New record created successfully";

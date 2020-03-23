@@ -64,22 +64,21 @@ $(document).on("click", "#signup", function() {
   var referrerVal = $("#referrer").val();
 
   var fd = new FormData();
+  fd.append("functionName","register")
   fd.append("username", usernameVal);
   fd.append("password", passwordVal);
   fd.append("email", emailVal);
   fd.append("referrer", referrerVal);
   fd.append("image", images);
   $.ajax({
-    url: "register.php",
+    url: "functions.php",
     type: "POST",
     dataType: "text",
     data: fd,
     processData: false,
     contentType: false,
     success: function(data) {
-      window.alert(data);
-      $("#RegisterStatus").remove();
-      $("body").append(loginDiv);
+      console.log(data)
     }
   });
 });
