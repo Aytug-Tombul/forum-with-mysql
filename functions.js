@@ -53,3 +53,33 @@ $(document).on("click", "#login", function() {
     }
   });
 });
+
+
+
+$(document).on("click", "#signup", function() {
+  var images = $("#image")[0].files[0];
+  var usernameVal = $("#username").val();
+  var passwordVal = $("#password").val();
+  var emailVal = $("#email").val();
+  var referrerVal = $("#referrer").val();
+
+  var fd = new FormData();
+  fd.append("username", usernameVal);
+  fd.append("password", passwordVal);
+  fd.append("email", emailVal);
+  fd.append("referrer", referrerVal);
+  fd.append("image", images);
+  $.ajax({
+    url: "register.php",
+    type: "POST",
+    dataType: "text",
+    data: fd,
+    processData: false,
+    contentType: false,
+    success: function(data) {
+      window.alert(data);
+      $("#RegisterStatus").remove();
+      $("body").append(loginDiv);
+    }
+  });
+});
