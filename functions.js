@@ -1,3 +1,4 @@
+
 $(document).on("click", "#loginBtn", function() {
     $("#forum").empty();
     let div= loginDiv();    

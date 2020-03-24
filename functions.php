@@ -1,6 +1,6 @@
 <?php
 
-use PHPMailer;
+use PHPMailer\PHPMailer\PHPMailer;
 
 
 require_once "PHPMailer/PHPMailer.php";
