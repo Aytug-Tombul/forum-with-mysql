@@ -41,11 +41,19 @@ $(document).on("click", "#login", function() {
       password: loginUserPw
     },
     success: function(res) {
+      res = JSON.parse(res);
       if (res.result == "success") {
         window.alert("Login Success Welcome " + res.username);
         loggedUsername = res.username;
         $("#addHere").append(
-          `<span class="navbar-text">` + loggedUsername + `</span>`
+          `<span class="navbar-text text-light" style="padding-right:10px;"> Welcome ` +
+            loggedUsername +
+            `</span>`
+        );
+        $("#loginBtn").remove();
+        $("#registerBtn").remove();
+        $("#addHere").append(
+          '<button class="btn btn-sm btn-outline-secondary" type="button" id="logoutBtn">Logout</button>'
         );
         backHome();
       } else {
@@ -79,6 +87,31 @@ $(document).on("click", "#signup", function() {
     success: function(data) {
       window.alert(data);
       backHome();
+    }
+  });
+});
+
+$(document).on("click", "#logoutBtn", function() {
+  loggedUsername = "";
+  $("#addHere").empty();
+  $("#addHere").append(
+    '<button class="btn btn-sm btn-outline-secondary" type="button" id="loginBtn">Login</button>' +
+      '<button class="btn btn-sm btn-outline-secondary" type="button" id="registerBtn">Register</button>'
+  );
+  $("#forum").empty();
+  let div = loginDiv();
+  $("#forum").append(div);
+});
+
+$(document).on("click", "#forgotBtn", function() {
+  var forgotEmail = $("#forgotEmail").val();
+  $.ajax({
+    url: "functions.php",
+    type: "POST",
+    dataType: "text",
+    data: { functionName :"forgot" ,email: forgotEmail },
+    success: function(response) {
+      window.alert(response);
     }
   });
 });

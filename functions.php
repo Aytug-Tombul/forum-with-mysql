@@ -3,10 +3,17 @@
 use PHPMailer\PHPMailer\PHPMailer;
 
 
+date_default_timezone_set('Europe/Istanbul');
+
 require_once "PHPMailer/PHPMailer.php";
 require_once "PHPMailer/SMTP.php";
 require_once "PHPMailer/Exception.php";
 
+function redirectToIndex()
+{
+    header('Location:index.html');
+    exit();
+}
 
 
 function generetaNewString($len = 10)
@@ -125,16 +132,18 @@ switch ($_POST['functionName']) {
             }
         }
         break;
+
+
     case 'forgot':
         $email = $_POST["email"];
-        $emailcheck = $pdo->query("SELECT `email` FROM `users_tbl` WHERE email='$email'");
+        $emailcheck = $pdo->prepare("SELECT `email` FROM `users` WHERE email=?");
+        $emailcheck->execute(array($email));
         if ($emailcheck->rowCount() > 0) {
             try {
                 $token = generetaNewString();
-
-                $sql = "UPDATE users_tbl SET token=?,token_Expire=? WHERE email =?";
+                $sql = "UPDATE users SET token=?,token_Expire=? WHERE email =?";
                 $forgot =$pdo->prepare($sql);
-                $forgot->execute(array($token,date("Y-m-d H:i:s")));
+                $forgot->execute(array($token,date('Y-m-d H:i:s', strtotime('5 minute')),$email));
 
                 $mail = new PHPMailer();
                 $mail->isSMTP();
@@ -150,8 +159,8 @@ switch ($_POST['functionName']) {
             
             In order to reset password, please click on the link below<br>
             <a href='
-            http://localhost/forum/forum-with-mysql/functions.php?functionName=resetPass&email=$email&token=$token
-            '>http://localhost/forum/forum-with-mysql/functions.php?functionName=resetPass&email=$email&token=$token</a><br><br>
+            http://localhost/forum/forum-with-mysql/resetPass.php?email=$email&token=$token
+            '>http://localhost/forum/forum-with-mysql/resetPass.php?email=$email&token=$token</a><br><br>
             Kind Regards,<br>
             Aytug T.
             ";
@@ -172,4 +181,7 @@ switch ($_POST['functionName']) {
         } else {
             echo 'Email not found. Please check your inputs.';
         }
+    break;
+        
 }
+
