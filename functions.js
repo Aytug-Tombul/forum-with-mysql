@@ -22,11 +22,14 @@ function backHome() {
   let div = homeDiv();
   $("#forum").append(div);
 }
-function goHealth() {
-  $("#forum").empty();
-  let div3 = healthDiv();
-  $("#forum").append(div3);
-}
+function goCategory() {
+  $(".card").on({
+    click: function() {
+     var category = $(".card-category",this).text();
+    }
+ })
+}    
+
 
 $(document).on("click", "#login", function() {
   var loginUserName = $("#username").val();
@@ -109,7 +112,7 @@ $(document).on("click", "#forgotBtn", function() {
     url: "functions.php",
     type: "POST",
     dataType: "text",
-    data: { functionName :"forgot" ,email: forgotEmail },
+    data: { functionName: "forgot", email: forgotEmail },
     success: function(response) {
       window.alert(response);
     }
