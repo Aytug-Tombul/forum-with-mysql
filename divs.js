@@ -1,5 +1,5 @@
 function loginDiv() {
-    var loginDiv=`<div id="loginStatus" style="padding-bottom: 10px;">
+  var loginDiv = `<div id="loginStatus" style="padding-bottom: 10px;">
     <form>
         <div class="form-group col-md-3">
             <label>Username</label>
@@ -23,10 +23,9 @@ function loginDiv() {
         <span class="badge badge-pill badge-warning" onclick=forgot()>Forgot Password ?</span>
       </div>
     </form>
-  </div>`
+  </div>`;
   return loginDiv;
 }
-
 
 function registerDiv() {
   var registerDiv = `<div id="RegisterStatus">
@@ -60,9 +59,8 @@ function registerDiv() {
 <br>
 </div>`;
 
-return registerDiv;  
+  return registerDiv;
 }
-
 
 function forgotDiv() {
   var forDiv = ` <div id="forgotStatus">
@@ -83,70 +81,78 @@ function forgotDiv() {
 </form> 
 </div>`;
 
-return forDiv;
+  return forDiv;
 }
 
 function homeDiv() {
   var homeDiv = `
   <div id="forum" style="padding-top: 20px;">
-      <div class="card-deck">
-        <div class="card text-center" style="width: 18rem; padding-right:0px;">
-        <div class="card-header bg-dark text-light">
-          <h5>Health</h5>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Popular Healty things</h5>
-          <a href="#" class="btn btn-dark" onclick="goHealth()">Go Category</a>
-        </div>
-        </div>
-        <div class="card text-center" style="width: 18rem; padding-right:0px;">
-        <div class="card-header bg-dark text-light">
-          <h5>Games</h5>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Popular Game things</h5>
-          <a href="#" class="btn btn-dark" onclick="goGames()">Go Category</a>
-        </div>
-        </div>
-        <div class="card text-center" style="width: 18rem; padding-right:0px;">
-        <div class="card-header bg-dark text-light">
-          <h5>Sport</h5>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Popular Sport things</h5>
-          <a href="#" class="btn btn-dark" onclick="goHealth()">Go Category</a>
-        </div>
-        </div>
-        </div>
-        <div class="card-deck" style="padding-top: 20px;">
-        <div class="card text-center">
-        <div class="card-header bg-dark text-light">
-          <h5>Social</h5>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Popular Social things</h5>
-          <a href="#" class="btn btn-dark" onclick="goHealth()">Go Category</a>
-        </div>
-        </div>
-        <div class="card text-center">
-        <div class="card-header bg-dark text-light">
-          <h5>Software</h5>
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Popular Software things</h5>
-          <a href="#" class="btn btn-dark" onclick="goHealth()">Go Category</a>
-        </div>
-        </div>
-        </div>
-    </div> 
-  `
-  ;
-
-return homeDiv;
+  <div class="card-deck">
+    <div class="card text-center" style="width: 18rem; padding-right:0px;">
+      <div class="card-header bg-dark text-light">
+        <h5 class="card-category">Health</h5>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Popular Healty things</h5>
+        <a href="#" class="btn btn-dark" onclick="goCategory()"
+          >Go Category</a
+        >
+      </div>
+    </div>
+    <div class="card text-center" style="width: 18rem; padding-right:0px;">
+      <div class="card-header bg-dark text-light">
+        <h5 class="card-category">Games</h5>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Popular Game things</h5>
+        <a href="#" class="btn btn-dark" onclick="goCategory()"
+          >Go Category</a
+        >
+      </div>
+    </div>
+    <div class="card text-center" style="width: 18rem; padding-right:0px;">
+      <div class="card-header bg-dark text-light">
+        <h5 class="card-category">Sport</h5>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Popular Sport things</h5>
+        <a href="#" class="btn btn-dark" onclick="goCategory()"
+          >Go Category</a
+        >
+      </div>
+    </div>
+  </div>
+  <div class="card-deck" style="padding-top: 20px;">
+    <div class="card text-center">
+      <div class="card-header bg-dark text-light">
+        <h5 class="card-category">Social</h5>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Popular Social things</h5>
+        <a href="#" class="btn btn-dark" onclick="goCategory()"
+          >Go Category</a
+        >
+      </div>
+    </div>
+    <div class="card text-center">
+      <div class="card-header bg-dark text-light">
+        <h5 class="card-category">Software</h5>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">Popular Software things</h5>
+        <a href="#" class="btn btn-dark" onclick="goCategory()"
+          >Go Category</a
+        >
+      </div>
+    </div>
+  </div>
+</div>
+  `;
+  return homeDiv;
 }
 
 function healthDiv() {
-  var healthDiv= `<a>You did it!</a>`;
+  var healthDiv = `<a>You did it!</a>`;
 
-return healthDiv;
+  return healthDiv;
 }

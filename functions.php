@@ -182,6 +182,12 @@ switch ($_POST['functionName']) {
             echo 'Email not found. Please check your inputs.';
         }
     break;
+
+    case 'goCategory':
+        $category = $_POST["categoryName"];
+        echo $category;
+
+
         
 }
 

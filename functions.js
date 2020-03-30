@@ -25,9 +25,20 @@ function backHome() {
 function goCategory() {
   $(".card").on({
     click: function() {
-     var category = $(".card-category",this).text();
-    }
+      category = $(".card-category",this).text();
+      $.ajax({
+        url: "functions.php",
+        type: "POST",
+        dataType: "text",
+        data: { functionName: "goCategory", categoryName :category},
+        success: function(response) {
+          console.log(response);
+        }
+      });
+    }   
+    
  })
+
 }    
 
 
