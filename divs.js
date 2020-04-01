@@ -151,8 +151,28 @@ function homeDiv() {
   return homeDiv;
 }
 
-function healthDiv() {
-  var healthDiv = `<a>You did it!</a>`;
+function categoryDiv() {
+  var categoryDiv = `
+  <div id="titles" style="padding-top: 20px;"></div>
+  <button
+  id="newTitle"
+  class="btn btn-lg btn-outline-secondary text-light bg-dark"
+  type="button"
+>
+  New Title
+</button>`;
+  return categoryDiv;
+}
+function newTitle() {
+  var newTitle = `
+  <div class="form-group green-border-focus col-sm-4">
+  <h4>New Title</h4>
+  <input type="text" class="form-control" id="title" placeholder="Title">
+  <textarea class="form-control" id="post" rows="5" placeholder="Write Something Here..."></textarea>
+  <button id="postTitle"
+  class="btn btn-lg btn-outline-secondary text-light bg-dark" type="button">New Title</button>
+  </div>
+  `;
 
-  return healthDiv;
+  return newTitle;
 }

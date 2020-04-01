@@ -93,7 +93,8 @@ switch ($_POST['functionName']) {
         } else {
             try {
 
-                $sql = "INSERT INTO `users` (`id`, `username`, `password`, `email`, `referrer`, `photo`, `token`, `token_Expire`,role) VALUES (?,?,?,?,?,?,?,?,?)";
+                $sql = "INSERT INTO `users` (`id`, `username`, `password`, `email`, `referrer`, `photo`, `token`, `token_Expire`,role) 
+                VALUES (?,?,?,?,?,?,?,?,?)";
                 $register = $pdo->prepare($sql);
                 $register->execute(array(NULL, $username, $password, $email, $referrer, $image, NULL, date("Y-m-d H:i:s"), "user"));
                 echo "New record created successfully";
@@ -186,7 +187,24 @@ switch ($_POST['functionName']) {
     case 'goCategory':
         $category = $_POST["categoryName"];
         echo $category;
+    break;
 
+    case 'newTitle':
+        $username = $_POST["username"];
+        $title = $_POST["title"];
+        $post = $_POST["post"];
+        $category = $_POST["categoryName"];
+        $sql="SELECT `id` FROM `users` WHERE username=?";
+        $getid=$pdo->prepare($sql);
+        $userid=$getid->execute(array($username));
+        $sql2 = "INSERT INTO `titles` (`id`, `name`, `user_id`, `category_name`, `date`) 
+        VALUES (?,?,?,?,?)";
+        $sendTitle =$pdo->prepare($sql2);
+        $sendTitle->execute(array(NULL,$title,$userid,$category, date("Y-m-d H:i:s")));
+        echo "New Title Created";
+        $sql3="SELECT `id` FROM `` WHERE username=?";
+        $getid=$pdo->prepare($sql);
+        $userid=$getid->execute(array($username));
 
         
 }

@@ -1,5 +1,5 @@
 var loggedUsername = "";
-
+var categoryName=""
 $(document).on("click", "#loginBtn", function() {
   $("#forum").empty();
   let div = loginDiv();
@@ -26,13 +26,16 @@ function goCategory() {
   $(".card").on({
     click: function() {
       category = $(".card-category",this).text();
+      categoryName=category;
       $.ajax({
         url: "functions.php",
         type: "POST",
         dataType: "text",
         data: { functionName: "goCategory", categoryName :category},
         success: function(response) {
-          console.log(response);
+          $("#forum").empty();
+          var div = categoryDiv();
+          $("#forum").append(div);
         }
       });
     }   
@@ -124,6 +127,30 @@ $(document).on("click", "#forgotBtn", function() {
     type: "POST",
     dataType: "text",
     data: { functionName: "forgot", email: forgotEmail },
+    success: function(response) {
+      window.alert(response);
+    }
+  });
+});
+
+$(document).on("click", "#newTitle", function() {
+  if (loggedUsername == "") {
+    window.alert("You are not Signed in pls login");
+  }else{
+    $("#forum").empty();
+    var buildTitle=newTitle();
+    $("#forum").append(buildTitle);
+  }
+});
+
+$(document).on("click", "#postTitle", function() {
+  var title= $("#title").val();
+  var post=$("#title").val();
+  $.ajax({
+    url: "functions.php",
+    type: "POST",
+    dataType: "text",
+    data: { functionName: "newTitle", username:loggedUsername, title:title, post:post ,categoryName:categoryName},
     success: function(response) {
       window.alert(response);
     }
