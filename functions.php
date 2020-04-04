@@ -184,28 +184,39 @@ switch ($_POST['functionName']) {
         }
     break;
 
-    case 'goCategory':
-        $category = $_POST["categoryName"];
-        echo $category;
-    break;
-
     case 'newTitle':
         $username = $_POST["username"];
         $title = $_POST["title"];
         $post = $_POST["post"];
         $category = $_POST["categoryName"];
-        $sql="SELECT `id` FROM `users` WHERE username=?";
-        $getid=$pdo->prepare($sql);
-        $userid=$getid->execute(array($username));
-        $sql2 = "INSERT INTO `titles` (`id`, `name`, `user_id`, `category_name`, `date`) 
-        VALUES (?,?,?,?,?)";
-        $sendTitle =$pdo->prepare($sql2);
-        $sendTitle->execute(array(NULL,$title,$userid,$category, date("Y-m-d H:i:s")));
+        $sql = "INSERT INTO `titles` (`id`, `title`, `user_id`, `category_name`, `date`) 
+        VALUES (?,?,(SELECT users.id FROM users WHERE username=?),?,?)";
+        $sendTitle =$pdo->prepare($sql);
+        $sendTitle->execute(array(NULL,$title,$username,$category, date("Y-m-d H:i:s")));
+        $sql2 = "INSERT INTO `posts` (`id`, `post`, `title_id`, `user_id`, `date`) 
+        VALUES (?,?,(SELECT titles.id FROM titles WHERE title=?),(SELECT users.id FROM users WHERE username=?),?)";
+        $sendPost =$pdo->prepare($sql2);
+        $sendPost->execute(array(NULL,$post,$title,$username, date("Y-m-d H:i:s")));
         echo "New Title Created";
-        $sql3="SELECT `id` FROM `` WHERE username=?";
-        $getid=$pdo->prepare($sql);
-        $userid=$getid->execute(array($username));
+    break;
 
+    case 'getTitles':
+        $category=$_POST["category"];
+        try {
+            $stmt = $pdo->prepare("SELECT id,title,date FROM titles WHERE category_name=?");
+            $stmt->execute(array($category));
+            while ($row = $stmt->fetch(pdo::FETCH_ASSOC)) {
+                $titles[]= $row;
+            }
+            if (!isset($titles)) {
+                echo false;
+            }else {
+                echo json_encode($titles);
+            }
+            
+        } catch (PDOException $e) {
+            echo $stmt . "<br>" . $e->getMessage();
+        }
         
 }
 

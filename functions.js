@@ -1,5 +1,5 @@
 var loggedUsername = "";
-var categoryName=""
+var categoryName = "";
 $(document).on("click", "#loginBtn", function() {
   $("#forum").empty();
   let div = loginDiv();
@@ -25,25 +25,23 @@ function backHome() {
 function goCategory() {
   $(".card").on({
     click: function() {
-      category = $(".card-category",this).text();
-      categoryName=category;
+      category = $(".card-category", this).text();
+      categoryName = category;
       $.ajax({
         url: "functions.php",
         type: "POST",
         dataType: "text",
-        data: { functionName: "goCategory", categoryName :category},
-        success: function(response) {
+        data: { functionName: "goCategory", categoryName: category },
+        success: function() {
           $("#forum").empty();
           var div = categoryDiv();
           $("#forum").append(div);
+          listTitles();
         }
       });
-    }   
-    
- })
-
-}    
-
+    }
+  });
+}
 
 $(document).on("click", "#login", function() {
   var loginUserName = $("#username").val();
@@ -136,23 +134,75 @@ $(document).on("click", "#forgotBtn", function() {
 $(document).on("click", "#newTitle", function() {
   if (loggedUsername == "") {
     window.alert("You are not Signed in pls login");
-  }else{
-    $("#forum").empty();
-    var buildTitle=newTitle();
+  } else {
+    $("#titles").empty();
+    var buildTitle = newTitle();
     $("#forum").append(buildTitle);
   }
 });
 
 $(document).on("click", "#postTitle", function() {
-  var title= $("#title").val();
-  var post=$("#title").val();
+  var title = $("#title").val();
+  var post = $("#title").val();
   $.ajax({
     url: "functions.php",
     type: "POST",
     dataType: "text",
-    data: { functionName: "newTitle", username:loggedUsername, title:title, post:post ,categoryName:categoryName},
+    data: {
+      functionName: "newTitle",
+      username: loggedUsername,
+      title: title,
+      post: post,
+      categoryName: categoryName
+    },
     success: function(response) {
+      $("#titles").empty();
       window.alert(response);
     }
   });
 });
+
+function postTitle(title, date = null, username, id = null) {
+  titleDiv =
+    `<div class="card w-75 p-1" id="listedPost" onclick=getTitlePosts()>
+  <div class="card-body">
+    <h5 class="card-text">` +
+    title +
+    `</h5>
+    <p class="card-text text-right"><small class="text-muted">` +
+    "#" +
+    id +
+    "  " +
+    username +
+    " " +
+    date +
+    `</small></p>
+  </div>
+</div>`;
+  $("#titles").append(titleDiv);
+}
+
+function listTitles() {
+  $.ajax({
+    url: "functions.php",
+    type: "POST",
+    dataType: "text",
+    data: { functionName: "getTitles",category:categoryName},
+    success: function(data) {
+      if (data== false) {
+        window.alert("No Titles Here Lets Create One");
+      }else{
+        data = JSON.parse(data);
+        $("#titles").empty();
+        for (let i = 0; i < data.length; i++) {
+          postTitle(data[i].title, data[i].date, data[i].username, data[i].id);
+      }
+      
+      }
+    }
+  });
+}
+
+function getTitlePosts() {
+  window.alert("You Clicked");
+}
