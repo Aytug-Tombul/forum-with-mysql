@@ -203,7 +203,8 @@ switch ($_POST['functionName']) {
     case 'getTitles':
         $category=$_POST["category"];
         try {
-            $stmt = $pdo->prepare("SELECT id,title,date FROM titles WHERE category_name=?");
+            $stmt = $pdo->prepare("SELECT titles.id,titles.title,titles.date,users.username 
+            FROM titles,users WHERE titles.category_name=? AND titles.user_id = users.id ");
             $stmt->execute(array($category));
             while ($row = $stmt->fetch(pdo::FETCH_ASSOC)) {
                 $titles[]= $row;
@@ -217,6 +218,21 @@ switch ($_POST['functionName']) {
         } catch (PDOException $e) {
             echo $stmt . "<br>" . $e->getMessage();
         }
-        
+    break;
+
+    case 'getPosts':
+        $titleName = $_POST["title"];
+        try {
+            $stmt = $pdo->prepare("SELECT users.username,posts.date,posts.id
+            FROM posts,users,titles WHERE posts.title_id=titles.title_id AND posts.user_id = users.id");
+            $stmt->execute(array($category));
+            while ($row = $stmt->fetch(pdo::FETCH_ASSOC)) {
+                $posts[]= $row;
+            }
+            echo json_encode($posts);
+            
+        } catch (PDOException $e) {
+            echo $stmt . "<br>" . $e->getMessage();
+        }
 }
 

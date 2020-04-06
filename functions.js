@@ -34,6 +34,7 @@ function goCategory() {
         data: { functionName: "goCategory", categoryName: category },
         success: function() {
           $("#forum").empty();
+          $("#forum").append("<h1>"+category+"</h1>");
           var div = categoryDiv();
           $("#forum").append(div);
           listTitles();
@@ -164,11 +165,11 @@ $(document).on("click", "#postTitle", function() {
 
 function postTitle(title, date = null, username, id = null) {
   titleDiv =
-    `<div class="card w-75 p-1" id="listedPost" onclick=getTitlePosts()>
+    `<div class="card w-75 p-1" id="listedTitle" onclick=getTitlePosts(this)>
   <div class="card-body">
-    <h5 class="card-text">` +
+    <h4 class="card-text">` +
     title +
-    `</h5>
+    `</h4>
     <p class="card-text text-right"><small class="text-muted">` +
     "#" +
     id +
@@ -203,6 +204,37 @@ function listTitles() {
   });
 }
 
-function getTitlePosts() {
-  window.alert("You Clicked");
+function getTitlePosts(obj) {
+  titleName = $("h4" , obj).text();
+  $.ajax({
+    url: "functions.php",
+    type: "POST",
+    dataType: "text",
+    data: { functionName: "getPosts",title:titleName},
+    success: function(data) {
+      for (let i = 0; i < data.length; i++) {
+        postTitle(data[i].title, data[i].date, data[i].username, data[i].id);
+    }
+    }
+  });
+}
+
+function postIt(post,date,id,username) {
+  postDiv =
+    `<div class="card" id="listedPost">
+  <div class="card-body">
+    <h4 class="card-text">` +
+    post +
+    `</h4>
+    <p class="card-text text-right"><small class="text-muted">` +
+    "#" +
+    id +
+    "  " +
+    username +
+    " " +
+    date +
+    `</small></p>
+  </div>
+</div>`;
+  $("#titles").append(titleDiv);
 }
