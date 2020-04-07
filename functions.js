@@ -1,10 +1,9 @@
 var loggedUsername = "";
 var categoryName = "";
 
-
-var postDiv=`<div id="posts" style="padding-top: 20px;">
+var postDiv = `<div id="posts" style="padding-top: 20px;">
 <h2 id="title"></h2>
-</div>`
+</div>`;
 
 $(document).on("click", "#loginBtn", function() {
   $("#forum").empty();
@@ -17,8 +16,6 @@ $(document).on("click", "#registerBtn", function() {
   let div = registerDiv();
   $("#forum").append(div);
 });
-
-
 
 function forgot() {
   $("#forum").empty();
@@ -42,7 +39,7 @@ function goCategory() {
         data: { functionName: "goCategory", categoryName: category },
         success: function() {
           $("#forum").empty();
-          $("#forum").append("<h1>"+category+"</h1>");
+          $("#forum").append("<h1>" + category + "</h1>");
           var div = categoryDiv();
           $("#forum").append(div);
           listTitles();
@@ -165,16 +162,14 @@ $(document).on("click", "#postTitle", function() {
       categoryName: categoryName
     },
     success: function(response) {
-      $("#titles").empty();
       backHome();
-      
     }
   });
 });
 
 function postTitle(title, date = null, username, id = null) {
-  titleDiv =
-    `<div class="card w-75 p-1" id="listedTitle" onclick=getTitlePosts(this)>
+  var titleDiv =
+    `<div class="card w-75 p-1" id="listedTitle">
   <div class="card-body">
     <h4 class="card-text">` +
     title +
@@ -197,44 +192,44 @@ function listTitles() {
     url: "functions.php",
     type: "POST",
     dataType: "text",
-    data: { functionName: "getTitles",category:categoryName},
+    data: { functionName: "getTitles", category: categoryName },
     success: function(data) {
-      if (data== false) {
+      if (data == false) {
         window.alert("No Titles Here Lets Create One");
-      }else{
+      } else {
         data = JSON.parse(data);
         $("#titles").empty();
         for (let i = 0; i < data.length; i++) {
           postTitle(data[i].title, data[i].date, data[i].username, data[i].id);
-      }
-      
+        }
       }
     }
   });
 }
 
-function getTitlePosts(obj) {
-  titleName = $("h4" , obj).text();
+$(document).on("click", "#listedTitle", function() {
+  var titleName = $("h4", this).text();
   $.ajax({
     url: "functions.php",
     type: "POST",
     dataType: "text",
-    data: { functionName: "getPosts",title:titleName},
-    success: function(data) {
-      data = JSON.parse(data);
-      console.log(data)  
+    data: { functionName: "getPosts", title: titleName },
+    success: function(res) {
+      res = JSON.parse(res);
+      console.log(res);
       $("#forum").empty();
       $("#forum").append(postDiv);
       $("#title").append(titleName);
-      for (let i = 0; i < data.length; i++) {
-        postIt(data[i].post, data[i].date, data[i].id, data[i].username);
-    }
+      for (let i = 0; i < res.length; i++) {
+        console.log(res[i].post);
+        postIt(res[i].post, res[i].date, res[i].id, res[i].username);
+      }
     }
   });
-}
+});
 
-function postIt(post,date,id,username) {
-  postDiv =
+function postIt(post, date, id, username) {
+  var postDiv =
     `<div class="card" id="listedPost">
   <div class="card-body">
     <h4 class="card-text">` +
