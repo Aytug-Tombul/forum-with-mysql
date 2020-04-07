@@ -1,5 +1,11 @@
 var loggedUsername = "";
 var categoryName = "";
+
+
+var postDiv=`<div id="posts" style="padding-top: 20px;">
+<h2 id="title"></h2>
+</div>`
+
 $(document).on("click", "#loginBtn", function() {
   $("#forum").empty();
   let div = loginDiv();
@@ -11,6 +17,8 @@ $(document).on("click", "#registerBtn", function() {
   let div = registerDiv();
   $("#forum").append(div);
 });
+
+
 
 function forgot() {
   $("#forum").empty();
@@ -136,7 +144,7 @@ $(document).on("click", "#newTitle", function() {
   if (loggedUsername == "") {
     window.alert("You are not Signed in pls login");
   } else {
-    $("#titles").empty();
+    $("#forum").empty();
     var buildTitle = newTitle();
     $("#forum").append(buildTitle);
   }
@@ -144,7 +152,7 @@ $(document).on("click", "#newTitle", function() {
 
 $(document).on("click", "#postTitle", function() {
   var title = $("#title").val();
-  var post = $("#title").val();
+  var post = $("#post").val();
   $.ajax({
     url: "functions.php",
     type: "POST",
@@ -158,7 +166,8 @@ $(document).on("click", "#postTitle", function() {
     },
     success: function(response) {
       $("#titles").empty();
-      window.alert(response);
+      backHome();
+      
     }
   });
 });
@@ -212,8 +221,13 @@ function getTitlePosts(obj) {
     dataType: "text",
     data: { functionName: "getPosts",title:titleName},
     success: function(data) {
+      data = JSON.parse(data);
+      console.log(data)  
+      $("#forum").empty();
+      $("#forum").append(postDiv);
+      $("#title").append(titleName);
       for (let i = 0; i < data.length; i++) {
-        postTitle(data[i].title, data[i].date, data[i].username, data[i].id);
+        postIt(data[i].post, data[i].date, data[i].id, data[i].username);
     }
     }
   });
@@ -236,5 +250,5 @@ function postIt(post,date,id,username) {
     `</small></p>
   </div>
 </div>`;
-  $("#titles").append(titleDiv);
+  $("#posts").append(postDiv);
 }

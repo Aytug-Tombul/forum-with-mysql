@@ -41,7 +41,7 @@ switch ($_POST['functionName']) {
         $password = $_POST['password'];
         $sql = "SELECT role FROM users WHERE username =? AND password = ?";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute(array($username,$password));
+        $stmt->execute(array($username, $password));
         $r = $stmt->fetch();
         $role = $r['role'];
         if ($stmt->rowCount() > 0) {
@@ -143,8 +143,8 @@ switch ($_POST['functionName']) {
             try {
                 $token = generetaNewString();
                 $sql = "UPDATE users SET token=?,token_Expire=? WHERE email =?";
-                $forgot =$pdo->prepare($sql);
-                $forgot->execute(array($token,date('Y-m-d H:i:s', strtotime('5 minute')),$email));
+                $forgot = $pdo->prepare($sql);
+                $forgot->execute(array($token, date('Y-m-d H:i:s', strtotime('5 minute')), $email));
 
                 $mail = new PHPMailer();
                 $mail->isSMTP();
@@ -182,7 +182,7 @@ switch ($_POST['functionName']) {
         } else {
             echo 'Email not found. Please check your inputs.';
         }
-    break;
+        break;
 
     case 'newTitle':
         $username = $_POST["username"];
@@ -191,48 +191,45 @@ switch ($_POST['functionName']) {
         $category = $_POST["categoryName"];
         $sql = "INSERT INTO `titles` (`id`, `title`, `user_id`, `category_name`, `date`) 
         VALUES (?,?,(SELECT users.id FROM users WHERE username=?),?,?)";
-        $sendTitle =$pdo->prepare($sql);
-        $sendTitle->execute(array(NULL,$title,$username,$category, date("Y-m-d H:i:s")));
+        $sendTitle = $pdo->prepare($sql);
+        $sendTitle->execute(array(NULL, $title, $username, $category, date("Y-m-d H:i:s")));
         $sql2 = "INSERT INTO `posts` (`id`, `post`, `title_id`, `user_id`, `date`) 
-        VALUES (?,?,(SELECT titles.id FROM titles WHERE title=?),(SELECT users.id FROM users WHERE username=?),?)";
-        $sendPost =$pdo->prepare($sql2);
-        $sendPost->execute(array(NULL,$post,$title,$username, date("Y-m-d H:i:s")));
+        VALUES (?,?,(SELECT id FROM titles WHERE title=?),(SELECT id FROM users WHERE username=?),?)";
+        $sendPost = $pdo->prepare($sql2);
+        $sendPost->execute(array(NULL, $post, $title, $username, date("Y-m-d H:i:s")));
         echo "New Title Created";
-    break;
+        break;
 
     case 'getTitles':
-        $category=$_POST["category"];
+        $category = $_POST["category"];
         try {
             $stmt = $pdo->prepare("SELECT titles.id,titles.title,titles.date,users.username 
             FROM titles,users WHERE titles.category_name=? AND titles.user_id = users.id ");
             $stmt->execute(array($category));
             while ($row = $stmt->fetch(pdo::FETCH_ASSOC)) {
-                $titles[]= $row;
+                $titles[] = $row;
             }
             if (!isset($titles)) {
                 echo false;
-            }else {
+            } else {
                 echo json_encode($titles);
             }
-            
         } catch (PDOException $e) {
             echo $stmt . "<br>" . $e->getMessage();
         }
-    break;
+        break;
 
     case 'getPosts':
         $titleName = $_POST["title"];
         try {
-            $stmt = $pdo->prepare("SELECT users.username,posts.date,posts.id
-            FROM posts,users,titles WHERE posts.title_id=titles.title_id AND posts.user_id = users.id");
-            $stmt->execute(array($category));
+            $stmt = $pdo->prepare("SELECT posts.post,users.username,posts.date,posts.id
+            FROM posts,users,titles WHERE titles.title=? AND users.id=posts.user_id AND titles.id=posts.title_id");
+            $stmt->execute(array($titleName));
             while ($row = $stmt->fetch(pdo::FETCH_ASSOC)) {
-                $posts[]= $row;
+                $posts[] = $row;
             }
             echo json_encode($posts);
-            
         } catch (PDOException $e) {
             echo $stmt . "<br>" . $e->getMessage();
         }
 }
-
