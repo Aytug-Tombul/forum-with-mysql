@@ -1,5 +1,6 @@
 var loggedUsername = "";
 var categoryName = "";
+var titleNow=""
 
 var postDiv = `<div id="posts" style="padding-top: 20px;">
 <h2 id="title"></h2>
@@ -25,6 +26,7 @@ function forgot() {
 function backHome() {
   $("#forum").empty();
   let div = homeDiv();
+  titleNow="";
   $("#forum").append(div);
 }
 function goCategory() {
@@ -202,13 +204,19 @@ function listTitles() {
         for (let i = 0; i < data.length; i++) {
           postTitle(data[i].title, data[i].date, data[i].username, data[i].id);
         }
+      
       }
     }
   });
 }
 
 $(document).on("click", "#listedTitle", function() {
-  var titleName = $("h4", this).text();
+  if (titleNow=="") {
+    var titleName = $("h4", this).text();
+    titleNow=titleName;
+  }else{
+    titleName=titleNow;
+  }
   $.ajax({
     url: "functions.php",
     type: "POST",
@@ -224,11 +232,15 @@ $(document).on("click", "#listedTitle", function() {
         console.log(res[i].post);
         postIt(res[i].post, res[i].date, res[i].id, res[i].username);
       }
+      $("#forum").append(`<div class="form-group green-border-focus" style="padding-top: 20px;">
+      <textarea class="form-control" id="post" rows="5" placeholder="Write Something Here..."></textarea>
+      <button type="button" class="btn btn-primary btn-lg" id="sendPost">POST</button>
+      </div>`);
     }
   });
 });
 
-function postIt(post, date, id, username) {
+function postIt(post, date=null, id, username) {
   var postDiv =
     `<div class="card" id="listedPost">
   <div class="card-body">
@@ -247,3 +259,22 @@ function postIt(post, date, id, username) {
 </div>`;
   $("#posts").append(postDiv);
 }
+
+$(document).on("click", "#sendPost", function() {
+  if (loggedUsername =="") {
+    window.alert("Please login or register");
+  }else{
+    var post = $("#post").val();
+    $.ajax({
+      url: "functions.php",
+      type: "POST",
+      data: { functionName:"sendPost",post: post, username: loggedUsername ,title: titleNow},
+      success: function() {
+        $("#posts").empty();
+        $("#listedTitle").trigger("click");
+        $("#post").val("");
+      }
+    });
+  }
+  
+});
