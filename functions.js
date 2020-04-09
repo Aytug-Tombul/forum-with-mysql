@@ -24,10 +24,7 @@ function forgot() {
   $("#forum").append(div);
 }
 function backHome() {
-  $("#forum").empty();
-  let div = homeDiv();
   titleNow="";
-  $("#forum").append(div);
 }
 function goCategory() {
   $(".card").on({
@@ -77,7 +74,15 @@ $(document).on("click", "#login", function() {
         $("#registerBtn").remove();
         $("#addHere").append(
           '<button class="btn btn-sm btn-outline-secondary" type="button" id="logoutBtn">Logout</button>'
-        );
+        );if (res.panelBtn=="4443") {
+          $("#addHere").append(` <button
+          class="btn btn-sm btn-outline-secondary"
+          type="button"
+          id="panelBtn"
+        >
+          Panel
+        </button>`)
+        }
         backHome();
       } else {
         window.alert("Login failed Please Check your username and password");
@@ -234,7 +239,7 @@ $(document).on("click", "#listedTitle", function() {
       }
       $("#forum").append(`<div class="form-group green-border-focus" style="padding-top: 20px;">
       <textarea class="form-control" id="post" rows="5" placeholder="Write Something Here..."></textarea>
-      <button type="button" class="btn btn-primary btn-lg" id="sendPost">POST</button>
+      <button type="button" class="btn btn-primary btn-lg" id="sendReply">POST</button>
       </div>`);
     }
   });
@@ -260,7 +265,7 @@ function postIt(post, date=null, id, username) {
   $("#posts").append(postDiv);
 }
 
-$(document).on("click", "#sendPost", function() {
+$(document).on("click", "#sendReply", function() {
   if (loggedUsername =="") {
     window.alert("Please login or register");
   }else{
@@ -276,5 +281,14 @@ $(document).on("click", "#sendPost", function() {
       }
     });
   }
+});
+
+$(document).on("click", "#panelBtn", function() {
+  $("#forum").empty();
+  var div= panelDiv();
+  $("#forum").append(div);
+});
+
+$(document).on("click", "#addCategories", function() {
   
 });

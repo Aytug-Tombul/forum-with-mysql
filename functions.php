@@ -234,12 +234,12 @@ switch ($_POST['functionName']) {
         }
     break;
 
-    case 'sendPost':
-        $post = $_POST["post"];
+    case 'sendReply':
+        $reply = $_POST["reply"];
         $username=$_POST["username"];
         $title = $_POST["title"];
         try {
-            $sql2 = "INSERT INTO `posts` (`id`, `post`, `title_id`, `user_id`, `date`) 
+            $sql2 = "INSERT INTO `replies` (`id`, `reply`, `title_id`, `user_id`, `date`) 
             VALUES (?,?,(SELECT id FROM titles WHERE title=?),(SELECT id FROM users WHERE username=?),?)";
             $sendPost = $pdo->prepare($sql2);
             $sendPost->execute(array(NULL, $post, $title, $username, date("Y-m-d H:i:s")));

@@ -176,3 +176,35 @@ function newTitle() {
 
   return newTitle;
 }
+
+
+function panelDiv() {
+  var panelDiv = `
+  <div id="Panel">
+      <div class="container">
+        <div class="row">
+          <div class="col-3">
+            <button
+            class="btn btn-lg bg-dark text-light  btn-outline-secondary"
+            type="button"
+            id="addCategory"
+          >
+            Add Categories
+          </button>
+          </div>
+          <div class="col-6">
+          </div>
+          <div class="col-3">
+            <button
+            class="btn btn-lg bg-dark ml-auto text-light btn-outline-secondary"
+            type="button"
+            id="deleteFunctions"
+          >
+            Delete Functions
+          </button>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  return panelDiv;
+}
