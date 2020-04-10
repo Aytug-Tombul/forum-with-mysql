@@ -1,7 +1,7 @@
 var loggedUsername = "";
 var categoryName = "";
-var titleNow=""
-
+var titleNow = "";
+backHome();
 var postDiv = `<div id="posts" style="padding-top: 20px;">
 <h2 id="title"></h2>
 </div>`;
@@ -24,7 +24,44 @@ function forgot() {
   $("#forum").append(div);
 }
 function backHome() {
-  titleNow="";
+  var deckNumber=0;
+  $.ajax({
+    url: "functions.php",
+    type: "POST",
+    dataType: "text",
+    data: { functionName: "home" },
+    success: function(res) {
+      res = JSON.parse(res);
+      $("#forum").empty();
+      for (let i = 0; i < res.length; i++) {
+        cateDiv =
+          `<div class="card text-center" style="width: 18rem; padding-right:0px;">
+        <div class="card-header bg-dark text-light">
+          <h5 class="card-category">` +
+          res[i].name +
+          `</h5>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title">` +
+          res[i].description +
+          `</h5>
+          <a href="#" class="btn btn-dark" onclick="goCategory()"
+            >Go Category</a
+          >`;
+          if (i%2==0) {
+            deckNumber=i;
+            $("#forum").append(`<div class="card-deck" id="deckNum`+deckNumber+`">
+            </div>`)
+            $("#deckNum"+deckNumber).append(cateDiv);
+          }else{
+            $("#deckNum"+deckNumber).append(cateDiv);
+          }
+          
+      }
+      
+      titleNow = "";
+    }
+  });
 }
 function goCategory() {
   $(".card").on({
@@ -74,14 +111,15 @@ $(document).on("click", "#login", function() {
         $("#registerBtn").remove();
         $("#addHere").append(
           '<button class="btn btn-sm btn-outline-secondary" type="button" id="logoutBtn">Logout</button>'
-        );if (res.panelBtn=="4443") {
+        );
+        if (res.panelBtn == "4443") {
           $("#addHere").append(` <button
           class="btn btn-sm btn-outline-secondary"
           type="button"
           id="panelBtn"
         >
           Panel
-        </button>`)
+        </button>`);
         }
         backHome();
       } else {
@@ -209,18 +247,17 @@ function listTitles() {
         for (let i = 0; i < data.length; i++) {
           postTitle(data[i].title, data[i].date, data[i].username, data[i].id);
         }
-      
       }
     }
   });
 }
 
 $(document).on("click", "#listedTitle", function() {
-  if (titleNow=="") {
+  if (titleNow == "") {
     var titleName = $("h4", this).text();
-    titleNow=titleName;
-  }else{
-    titleName=titleNow;
+    titleNow = titleName;
+  } else {
+    titleName = titleNow;
   }
   $.ajax({
     url: "functions.php",
@@ -237,7 +274,10 @@ $(document).on("click", "#listedTitle", function() {
         console.log(res[i].post);
         postIt(res[i].post, res[i].date, res[i].id, res[i].username);
       }
-      $("#forum").append(`<div class="form-group green-border-focus" style="padding-top: 20px;">
+      $("#forum")
+        .append(`
+        <div id="replies"></div>
+        <div class="form-group green-border-focus" style="padding-top: 20px;">
       <textarea class="form-control" id="post" rows="5" placeholder="Write Something Here..."></textarea>
       <button type="button" class="btn btn-primary btn-lg" id="sendReply">POST</button>
       </div>`);
@@ -245,7 +285,7 @@ $(document).on("click", "#listedTitle", function() {
   });
 });
 
-function postIt(post, date=null, id, username) {
+function postIt(post, date = null, id, username) {
   var postDiv =
     `<div class="card" id="listedPost">
   <div class="card-body">
@@ -266,17 +306,20 @@ function postIt(post, date=null, id, username) {
 }
 
 $(document).on("click", "#sendReply", function() {
-  if (loggedUsername =="") {
+  if (loggedUsername == "") {
     window.alert("Please login or register");
-  }else{
-    var post = $("#post").val();
+  } else {
+    var reply = $("#post").val();
     $.ajax({
       url: "functions.php",
       type: "POST",
-      data: { functionName:"sendPost",post: post, username: loggedUsername ,title: titleNow},
+      data: {
+        functionName: "sendReply",
+        reply: reply,
+        username: loggedUsername,
+        title: titleNow
+      },
       success: function() {
-        $("#posts").empty();
-        $("#listedTitle").trigger("click");
         $("#post").val("");
       }
     });
@@ -285,10 +328,50 @@ $(document).on("click", "#sendReply", function() {
 
 $(document).on("click", "#panelBtn", function() {
   $("#forum").empty();
-  var div= panelDiv();
+  var div = panelDiv();
   $("#forum").append(div);
 });
 
-$(document).on("click", "#addCategories", function() {
-  
+$(document).on("click", "#addCategory", function() {
+  $("#categoryForm").remove();
+  addDiv = `<div id="categoryForm" style="padding-bottom: 10px;">
+  <form>
+      <div class="form-group col-md-3">
+          <label>Category Name</label>
+          <input type="text" class="form-control" id="categoryName" placeholder="Category" />
+    </div>
+    <div class="form-group col-md-3">
+      <label>Description</label>
+      <input
+        type="text"
+        class="form-control"
+        id="description"
+      />
+    </div>
+    <div class="form-group col-md-3">
+      <button type="button" class="btn btn-primary" id="sendCategory">
+        ADD
+      </button>
+    </div>
+  </form>
+</div>`;
+  $("#forum").append(addDiv);
+});
+
+$(document).on("click", "#sendCategory", function() {
+  var catName = $("#categoryName").val();
+  var description = $("#description").val();
+  $.ajax({
+    url: "functions.php",
+    type: "POST",
+    data: {
+      functionName: "addCategory",
+      categoryName: catName,
+      description: description
+    },
+    success: function() {
+      window.alert("Category created.")
+      $("#categoryForm").remove();
+    }
+  });
 });

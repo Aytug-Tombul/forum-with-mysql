@@ -247,4 +247,29 @@ switch ($_POST['functionName']) {
             echo $stmt . "<br>" . $e->getMessage();
         }
     break;
+
+    case 'addCategory':
+        $categoryName = $_POST["categoryName"];
+        $description=$_POST["description"];
+        try {
+            $sql2 = "INSERT INTO `categories` (`id`, `name`, `description`, `date`) 
+            VALUES (?,?,?,?)";
+            $sendPost = $pdo->prepare($sql2);
+            $sendPost->execute(array(NULL, $categoryName, $description, date("Y-m-d H:i:s")));
+        } catch (PDOException $e) {
+            echo $stmt . "<br>" . $e->getMessage();
+        }
+    break;
+
+    case 'home':
+        try {
+            $stmt = $pdo->prepare("SELECT name , description FROM categories");
+            $stmt->execute();
+            while ($row = $stmt->fetch(pdo::FETCH_ASSOC)) {
+                $categories[] = $row;
+            }
+            echo json_encode($categories);
+        } catch (PDOException $e) {
+            echo $stmt . "<br>" . $e->getMessage();
+        }
 }
