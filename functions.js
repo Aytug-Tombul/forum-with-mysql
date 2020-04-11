@@ -426,3 +426,9 @@ $(document).on("click", "#sendCategory", function() {
     }
   });
 });
+
+$(document).on("click", "#panelBtn", function() {
+  $("#forum").empty();
+  var div = panelDiv();
+  $("#forum").append(div);
+});
