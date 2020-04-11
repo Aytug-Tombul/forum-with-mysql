@@ -263,19 +263,18 @@ $(document).on("click", "#listedTitle", function() {
     url: "functions.php",
     type: "POST",
     dataType: "text",
-    data: { functionName: "getPosts", title: titleName },
+    data: { functionName: "getPost", title: titleName },
     success: function(res) {
       res = JSON.parse(res);
       console.log(res);
       $("#forum").empty();
       $("#forum").append(postDiv);
       $("#title").append(titleName);
-      for (let i = 0; i < res.length; i++) {
-        console.log(res[i].post);
-        postIt(res[i].post, res[i].date, res[i].id, res[i].username);
-      }
-      $("#forum")
-        .append(`
+     // for (let i = 0; i < res.length; i++) {
+        //console.log(res[i].post);
+        //postIt(res[i].post, res[i].date, res[i].id, res[i].username);
+      //}
+      $("#forum").append(`
         <div id="replies"></div>
         <div class="form-group green-border-focus" style="padding-top: 20px;">
       <textarea class="form-control" id="post" rows="5" placeholder="Write Something Here..."></textarea>
@@ -319,12 +318,34 @@ $(document).on("click", "#sendReply", function() {
         username: loggedUsername,
         title: titleNow
       },
-      success: function() {
+      success: function(res) {
+        $("Reply Sended")
         $("#post").val("");
       }
     });
   }
 });
+
+function listReplies(reply, date = null, username, id = null) {
+  var replyDiv =
+    `<div class="card w-30 h-50" id="reply">
+  <div class="card-body">
+    <h4 class="card-text">` +
+    reply +
+    `</h4>
+    <p class="card-text text-right"><small class="text-muted">` +
+    "#" +
+    id +
+    "  " +
+    username +
+    " " +
+    date +
+    `</small></p>
+  </div>
+</div>`;
+  $("#titles").append(replyDiv);
+}
+
 
 $(document).on("click", "#panelBtn", function() {
   $("#forum").empty();

@@ -219,16 +219,24 @@ switch ($_POST['functionName']) {
         }
         break;
 
-    case 'getPosts':
+    case 'getPost':
         $titleName = $_POST["title"];
         try {
             $stmt = $pdo->prepare("SELECT posts.post,users.username,posts.date,posts.id
             FROM posts,users,titles WHERE titles.title=? AND users.id=posts.user_id AND titles.id=posts.title_id");
             $stmt->execute(array($titleName));
             while ($row = $stmt->fetch(pdo::FETCH_ASSOC)) {
-                $posts[] = $row;
+                $post[] = $row;
             }
-            echo json_encode($posts);
+            $stmt2 = $pdo->prepare("SELECT replies.reply,users.username,replies.date,replies.id
+            FROM replies,users,titles 
+            WHERE titles.title=? AND users.id=replies.user_id AND titles.id=replies.title_id");
+            $stmt2->execute(array($titleName));
+            
+            while ($row = $stmt2->fetch(pdo::FETCH_ASSOC)) {
+                $replies[] = $row;
+            }
+            echo json_encode(array_map(null,$post,$replies));
         } catch (PDOException $e) {
             echo $stmt . "<br>" . $e->getMessage();
         }
@@ -242,9 +250,9 @@ switch ($_POST['functionName']) {
             $sql2 = "INSERT INTO `replies` (`id`, `reply`, `title_id`, `user_id`, `date`) 
             VALUES (?,?,(SELECT id FROM titles WHERE title=?),(SELECT id FROM users WHERE username=?),?)";
             $sendPost = $pdo->prepare($sql2);
-            $sendPost->execute(array(NULL, $post, $title, $username, date("Y-m-d H:i:s")));
+            $sendPost->execute(array(NULL, $reply, $title, $username, date("Y-m-d H:i:s")));
         } catch (PDOException $e) {
-            echo $stmt . "<br>" . $e->getMessage();
+            echo $sql2 . "<br>" . $e->getMessage();
         }
     break;
 
