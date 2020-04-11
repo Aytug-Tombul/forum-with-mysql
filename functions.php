@@ -236,7 +236,8 @@ switch ($_POST['functionName']) {
             while ($row = $stmt2->fetch(pdo::FETCH_ASSOC)) {
                 $replies[] = $row;
             }
-            echo json_encode(array_map(null,$post,$replies));
+            $every=$post+$replies;
+            echo json_encode($every);
         } catch (PDOException $e) {
             echo $stmt . "<br>" . $e->getMessage();
         }

@@ -267,16 +267,22 @@ $(document).on("click", "#listedTitle", function() {
     success: function(res) {
       res = JSON.parse(res);
       console.log(res);
+
       $("#forum").empty();
       $("#forum").append(postDiv);
       $("#title").append(titleName);
-     // for (let i = 0; i < res.length; i++) {
-        //console.log(res[i].post);
-        //postIt(res[i].post, res[i].date, res[i].id, res[i].username);
-      //}
+      for (let i = 0; i < res.length; i++) {
+        if (i==0) {
+          postIt("post",res[i].post, res[i].date, res[i].id, res[i].username);
+        }
+        else{
+          postIt("reply",res[i].reply, res[i].date, res[i].id, res[i].username);
+          //console.log(res[i].reply);
+        }
+        
+      }
       $("#forum").append(`
-        <div id="replies"></div>
-        <div class="form-group green-border-focus" style="padding-top: 20px;">
+      <div class="form-group green-border-focus" style="padding-top: 20px;">
       <textarea class="form-control" id="post" rows="5" placeholder="Write Something Here..."></textarea>
       <button type="button" class="btn btn-primary btn-lg" id="sendReply">POST</button>
       </div>`);
@@ -284,12 +290,13 @@ $(document).on("click", "#listedTitle", function() {
   });
 });
 
-function postIt(post, date = null, id, username) {
-  var postDiv =
+function postIt(type,pack, date = null, id, username) {
+  if (type=="post") {
+    var postDiv =
     `<div class="card" id="listedPost">
   <div class="card-body">
     <h4 class="card-text">` +
-    post +
+    pack +
     `</h4>
     <p class="card-text text-right"><small class="text-muted">` +
     "#" +
@@ -301,8 +308,31 @@ function postIt(post, date = null, id, username) {
     `</small></p>
   </div>
 </div>`;
-  $("#posts").append(postDiv);
+  $("#posts").append(postDiv)
+  $("#forum").append(`<div id="replies" style="padding-top: 20px;">
+  </div>`);
+  }
+  else{
+    var replyDiv =
+    `<div class="card w-30 h-30" id="listedReply">
+  <div class="card-body">
+    <h4 class="card-text">` +
+    pack +
+    `</h4>
+    <p class="card-text text-right"><small class="text-muted">` +
+    "#" +
+    id +
+    "  " +
+    username +
+    " " +
+    date +
+    `</small></p>
+  </div>
+</div>`;
+  $("#replies").append(replyDiv);
+  }
 }
+
 
 $(document).on("click", "#sendReply", function() {
   if (loggedUsername == "") {
