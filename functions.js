@@ -24,7 +24,7 @@ function forgot() {
   $("#forum").append(div);
 }
 function backHome() {
-  var deckNumber=0;
+  var deckNumber = 0;
   $.ajax({
     url: "functions.php",
     type: "POST",
@@ -48,17 +48,20 @@ function backHome() {
           <a href="#" class="btn btn-dark" onclick="goCategory()"
             >Go Category</a
           >`;
-          if (i%2==0) {
-            deckNumber=i;
-            $("#forum").append(`<div class="card-deck" id="deckNum`+deckNumber+`">
-            </div>`)
-            $("#deckNum"+deckNumber).append(cateDiv);
-          }else{
-            $("#deckNum"+deckNumber).append(cateDiv);
-          }
-          
+        if (i % 2 == 0) {
+          deckNumber = i;
+          $("#forum").append(
+            `<div class="card-deck" id="deckNum` +
+              deckNumber +
+              `">
+            </div>`
+          );
+          $("#deckNum" + deckNumber).append(cateDiv);
+        } else {
+          $("#deckNum" + deckNumber).append(cateDiv);
+        }
       }
-      
+
       titleNow = "";
     }
   });
@@ -272,14 +275,18 @@ $(document).on("click", "#listedTitle", function() {
       $("#forum").append(postDiv);
       $("#title").append(titleName);
       for (let i = 0; i < res.length; i++) {
-        if (i==0) {
-          postIt("post",res[i].post, res[i].date, res[i].id, res[i].username);
-        }
-        else{
-          postIt("reply",res[i].reply, res[i].date, res[i].id, res[i].username);
+        if (i == 0) {
+          postIt("post", res[i].post, res[i].date, res[i].id, res[i].username);
+        } else {
+          postIt(
+            "reply",
+            res[i].reply,
+            res[i].date,
+            res[i].id,
+            res[i].username
+          );
           //console.log(res[i].reply);
         }
-        
       }
       $("#forum").append(`
       <div class="form-group green-border-focus" style="padding-top: 20px;">
@@ -290,49 +297,47 @@ $(document).on("click", "#listedTitle", function() {
   });
 });
 
-function postIt(type,pack, date = null, id, username) {
-  if (type=="post") {
+function postIt(type, pack, date = null, id, username) {
+  if (type == "post") {
     var postDiv =
-    `<div class="card" id="listedPost">
+      `<div class="card" id="listedPost">
   <div class="card-body">
     <h4 class="card-text">` +
-    pack +
-    `</h4>
+      pack +
+      `</h4>
     <p class="card-text text-right"><small class="text-muted">` +
-    "#" +
-    id +
-    "  " +
-    username +
-    " " +
-    date +
-    `</small></p>
+      "#" +
+      id +
+      "  " +
+      username +
+      " " +
+      date +
+      `</small></p>
   </div>
 </div>`;
-  $("#posts").append(postDiv)
-  $("#forum").append(`<div id="replies" style="padding-top: 20px;">
+    $("#posts").append(postDiv);
+    $("#forum").append(`<div id="replies" style="padding-top: 20px;">
   </div>`);
-  }
-  else{
+  } else {
     var replyDiv =
-    `<div class="card w-30 h-30" id="listedReply">
+      `<div class="card w-30 h-30" id="listedReply">
   <div class="card-body">
     <h4 class="card-text">` +
-    pack +
-    `</h4>
+      pack +
+      `</h4>
     <p class="card-text text-right"><small class="text-muted">` +
-    "#" +
-    id +
-    "  " +
-    username +
-    " " +
-    date +
-    `</small></p>
+      "#" +
+      id +
+      "  " +
+      username +
+      " " +
+      date +
+      `</small></p>
   </div>
 </div>`;
-  $("#replies").append(replyDiv);
+    $("#replies").append(replyDiv);
   }
 }
-
 
 $(document).on("click", "#sendReply", function() {
   if (loggedUsername == "") {
@@ -349,7 +354,7 @@ $(document).on("click", "#sendReply", function() {
         title: titleNow
       },
       success: function(res) {
-        $("Reply Sended")
+        $("Reply Sended");
         $("#post").val("");
       }
     });
@@ -375,7 +380,6 @@ function listReplies(reply, date = null, username, id = null) {
 </div>`;
   $("#titles").append(replyDiv);
 }
-
 
 $(document).on("click", "#panelBtn", function() {
   $("#forum").empty();
@@ -421,14 +425,29 @@ $(document).on("click", "#sendCategory", function() {
       description: description
     },
     success: function() {
-      window.alert("Category created.")
+      window.alert("Category created.");
       $("#categoryForm").remove();
     }
   });
 });
 
-$(document).on("click", "#panelBtn", function() {
-  $("#forum").empty();
-  var div = panelDiv();
-  $("#forum").append(div);
+$(document).on("click", "#search", function() {
+  var searchVal = $("#searchVal").val();
+  if (searchVal == "" || searchVal == "%" || searchVal == " ") {
+    window.alert("Please dont input (,./%$#@!%^&)");
+  } else {
+    var searchVal = "%" + searchVal + "%";
+    $.ajax({
+      url: "functions.php",
+      type: "POST",
+      data: {
+        functionName: "search",
+        searchVal: searchVal
+      },
+      success: function(res) {
+        res=JSON.parse(res);
+        console.log(res);
+      }
+    });
+  }
 });

@@ -232,20 +232,20 @@ switch ($_POST['functionName']) {
             FROM replies,users,titles 
             WHERE titles.title=? AND users.id=replies.user_id AND titles.id=replies.title_id");
             $stmt2->execute(array($titleName));
-            
+
             while ($row = $stmt2->fetch(pdo::FETCH_ASSOC)) {
                 $replies[] = $row;
             }
-            $every=$post+$replies;
+            $every = $post + $replies;
             echo json_encode($every);
         } catch (PDOException $e) {
             echo $stmt . "<br>" . $e->getMessage();
         }
-    break;
+        break;
 
     case 'sendReply':
         $reply = $_POST["reply"];
-        $username=$_POST["username"];
+        $username = $_POST["username"];
         $title = $_POST["title"];
         try {
             $sql2 = "INSERT INTO `replies` (`id`, `reply`, `title_id`, `user_id`, `date`) 
@@ -255,11 +255,11 @@ switch ($_POST['functionName']) {
         } catch (PDOException $e) {
             echo $sql2 . "<br>" . $e->getMessage();
         }
-    break;
+        break;
 
     case 'addCategory':
         $categoryName = $_POST["categoryName"];
-        $description=$_POST["description"];
+        $description = $_POST["description"];
         try {
             $sql2 = "INSERT INTO `categories` (`id`, `name`, `description`, `date`) 
             VALUES (?,?,?,?)";
@@ -268,7 +268,7 @@ switch ($_POST['functionName']) {
         } catch (PDOException $e) {
             echo $stmt . "<br>" . $e->getMessage();
         }
-    break;
+        break;
 
     case 'home':
         try {
@@ -281,4 +281,47 @@ switch ($_POST['functionName']) {
         } catch (PDOException $e) {
             echo $stmt . "<br>" . $e->getMessage();
         }
+        break;
+
+    case 'search':
+        $searchVal = $_POST["searchVal"];
+        $every = [];
+        $search = ["category"=>[]
+        ,"post"=>[]
+        ,"reply"=>[]
+        ,"title"=>[]
+        ,"user"=>[]
+    ];
+        try {
+            $stmt = $pdo->prepare('SELECT * FROM `forum`.`categories` WHERE (CONVERT(`name` USING utf8) LIKE ? OR CONVERT(`description` USING utf8) LIKE ?)');
+            $stmt->execute(array($searchVal, $searchVal));  
+            while ($row = $stmt->fetch(pdo::FETCH_ASSOC)) {
+                array_push($search["category"],$row);
+                
+            }
+            $stmt2 = $pdo->prepare('SELECT * FROM `forum`.`posts` WHERE (CONVERT(`post` USING utf8) LIKE ?)');
+            $stmt2->execute(array($searchVal));
+            while ($row = $stmt2->fetch(pdo::FETCH_ASSOC)) {
+                array_push($search["post"],$row);
+            }
+            $stmt3 = $pdo->prepare('SELECT * FROM `forum`.`replies` WHERE (CONVERT(`reply` USING utf8) LIKE ?)');
+            $stmt3->execute(array($searchVal));
+            while ($row = $stmt3->fetch(pdo::FETCH_ASSOC)) {
+                array_push($search["reply"],$row);
+            }
+            $stmt4 = $pdo->prepare('SELECT * FROM `forum`.`titles` WHERE (CONVERT(`title` USING utf8) LIKE ?)');
+            $stmt4->execute(array($searchVal));
+            while ($row = $stmt4->fetch(pdo::FETCH_ASSOC)) {
+                array_push($search["title"],$row);
+            }
+            $stmt5 = $pdo->prepare('SELECT * FROM `forum`.`users` WHERE (CONVERT(`username` USING utf8) LIKE ?)');
+            $stmt5->execute(array($searchVal));
+            while ($row = $stmt5->fetch(pdo::FETCH_ASSOC)) {
+                array_push($search["user"],$row);
+            }
+            echo json_encode($search);
+        } catch (PDOException $e) {
+            echo $stmt . "<br>" . $e->getMessage();
+        }
+        break;
 }
