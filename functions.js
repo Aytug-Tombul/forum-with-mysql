@@ -274,19 +274,15 @@ $(document).on("click", "#listedTitle", function() {
       $("#forum").empty();
       $("#forum").append(postDiv);
       $("#title").append(titleName);
-      for (let i = 0; i < res.length; i++) {
-        if (i == 0) {
-          postIt("post", res[i].post, res[i].date, res[i].id, res[i].username);
-        } else {
+      postIt("post", res["post"][0].post, res["post"][0].date, res["post"][0].id, res["post"][0].username);
+      for (let i = 0; i < res["replies"].length; i++) {
           postIt(
             "reply",
-            res[i].reply,
-            res[i].date,
-            res[i].id,
-            res[i].username
-          );
+            res["replies"][i].reply,
+            res["replies"][i].date,
+            res["replies"][i].id,
+            res["replies"][i].username)
           //console.log(res[i].reply);
-        }
       }
       $("#forum").append(`
       <div class="form-group green-border-focus" style="padding-top: 20px;">
@@ -317,6 +313,7 @@ function postIt(type, pack, date = null, id, username) {
 </div>`;
     $("#posts").append(postDiv);
     $("#forum").append(`<div id="replies" style="padding-top: 20px;">
+    <h2>REPLIES</h2>
   </div>`);
   } else {
     var replyDiv =
@@ -378,7 +375,7 @@ function listReplies(reply, date = null, username, id = null) {
     `</small></p>
   </div>
 </div>`;
-  $("#titles").append(replyDiv);
+  $("#replies").append(replyDiv);
 }
 
 $(document).on("click", "#panelBtn", function() {
@@ -436,7 +433,6 @@ $(document).on("click", "#search", function() {
   if (searchVal == "" || searchVal == "%" || searchVal == " ") {
     window.alert("Please dont input (,./%$#@!%^&)");
   } else {
-    var searchVal = "%" + searchVal + "%";
     $.ajax({
       url: "functions.php",
       type: "POST",
@@ -445,7 +441,7 @@ $(document).on("click", "#search", function() {
         searchVal: searchVal
       },
       success: function(res) {
-        res=JSON.parse(res);
+        //res=JSON.parse(res);
         console.log(res);
       }
     });
